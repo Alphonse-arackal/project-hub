@@ -287,3 +287,65 @@ a { color: inherit; }
   .github-lookup-row .button { width: 100%; }
   .github-repo-list { max-height: 36vh; }
 }
+
+/* Supabase cloud authentication */
+.auth-page {
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+  padding: 32px 18px;
+  background: #0b0b0b;
+  color: #f4f4f5;
+}
+.auth-card {
+  width: min(100%, 440px);
+  padding: 34px;
+  border: 1px solid #2d2d2d;
+  border-radius: 14px;
+  background: #111111;
+  box-shadow: 0 18px 60px rgba(0,0,0,.22);
+}
+.auth-brand-mark {
+  width: 48px;
+  height: 48px;
+  display: grid;
+  place-items: center;
+  margin-bottom: 24px;
+  border: 1px solid #49401c;
+  border-radius: 12px;
+  background: #19170f;
+  color: #ffcc24;
+}
+.auth-eyebrow { margin-bottom: 12px; }
+.auth-card h1 { margin: 0; font-size: clamp(34px, 7vw, 44px); line-height: 1.05; letter-spacing: -1.7px; }
+.auth-card h1 span { color: #ffcc24; }
+.auth-intro { margin: 14px 0 20px; color: #a1a1aa; font-size: 13px; line-height: 1.7; }
+.auth-benefits { display: flex; flex-wrap: wrap; gap: 12px 18px; margin-bottom: 24px; color: #b8b8b8; font-size: 11px; }
+.auth-benefits span { display: inline-flex; align-items: center; gap: 7px; }
+.auth-benefits svg { color: #ffcc24; }
+.auth-tabs { display: grid; grid-template-columns: 1fr 1fr; gap: 4px; padding: 4px; margin-bottom: 22px; border: 1px solid #292929; border-radius: 9px; background: #0b0b0b; }
+.auth-tabs button { min-height: 37px; border: 0; border-radius: 6px; background: transparent; color: #8d8d8d; font-size: 12px; cursor: pointer; }
+.auth-tabs button.active { background: #242424; color: #f4f4f5; }
+.auth-form { display: flex; flex-direction: column; gap: 9px; }
+.auth-form label { margin-top: 5px; color: #d4d4d8; font-size: 11px; font-weight: 600; }
+.auth-form .input-shell { margin-bottom: 5px; }
+.auth-submit, .auth-github { width: 100%; justify-content: center; min-height: 44px; }
+.auth-divider { display: flex; align-items: center; gap: 12px; margin: 21px 0; color: #666; font-size: 10px; }
+.auth-divider::before, .auth-divider::after { content: ''; height: 1px; flex: 1; background: #2b2b2b; }
+.auth-error, .auth-message { margin: 5px 0; padding: 10px 12px; border: 1px solid #613333; border-radius: 7px; background: #211212; color: #fca5a5; font-size: 11px; line-height: 1.5; }
+.auth-message { border-color: #3b512b; background: #141d10; color: #c4f0a5; }
+.auth-footnote { margin: 18px 0 0; color: #737373; font-size: 10px; line-height: 1.65; }
+.auth-loading { color: #bdbdbd; font-size: 13px; }
+.setup-card { width: min(100%, 540px); }
+.setup-steps { display: grid; gap: 12px; padding-left: 22px; color: #c4c4c4; font-size: 12px; line-height: 1.6; }
+.setup-steps code { padding: 2px 5px; border: 1px solid #303030; border-radius: 4px; background: #080808; color: #ffdb57; font-size: 11px; }
+.account-strip { display: inline-flex; align-items: center; gap: 12px; }
+.account-strip > span { max-width: 250px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.account-strip button { padding: 4px 8px; border: 1px solid #383838; border-radius: 5px; background: #151515; color: #c9c9c9; font: inherit; font-size: 10px; cursor: pointer; }
+.account-strip button:hover { border-color: #ffcc24; color: #ffcc24; }
+@media (max-width: 560px) {
+  .auth-card { padding: 25px 20px; }
+  .hero-bottomline { align-items: flex-start; gap: 12px; }
+  .account-strip { align-items: flex-end; flex-direction: column; gap: 6px; }
+  .account-strip > span { max-width: 150px; }
+}

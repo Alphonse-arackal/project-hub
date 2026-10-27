@@ -37,7 +37,7 @@ export default function ProjectForm({ initialValue, onSave, onToast }) {
     setErrors((current) => ({ ...current, [name]: '' }))
   }
 
-  function submit(event) {
+  async function submit(event) {
     event.preventDefault()
     const nextErrors = {}
     if (!form.name.trim()) nextErrors.name = 'Project name is required.'
@@ -57,9 +57,13 @@ export default function ProjectForm({ initialValue, onSave, onToast }) {
       icon: form.icon,
       technologies: [...new Set(form.technologies.split(',').map((item) => item.trim()).filter(Boolean))],
     }
-    onSave(project)
-    onToast({ type: 'success', message: editing ? 'Project updated successfully.' : 'Project added successfully.' })
-    navigate('/')
+    try {
+      await onSave(project)
+      onToast({ type: 'success', message: editing ? 'Project updated and synced to the cloud.' : 'Project added and synced to the cloud.' })
+      navigate('/')
+    } catch {
+      setErrors((current) => ({ ...current, submit: 'Could not save to the cloud. Please check your connection and try again.' }))
+    }
   }
 
   return (
@@ -77,6 +81,7 @@ export default function ProjectForm({ initialValue, onSave, onToast }) {
       </section>
 
       <form className="project-form" onSubmit={submit} noValidate>
+        {errors.submit && <div className="auth-error" role="alert">{errors.submit}</div>}
         <div className="form-field">
           <label htmlFor="project-name">Project name <span className="required">*</span></label>
           <div className={`input-shell ${errors.name ? 'has-error' : ''}`}>

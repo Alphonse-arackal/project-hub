@@ -2,9 +2,8 @@ import { useMemo, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Plus, Search, X, Copy, ArrowUpRight, Layers3, Github, Download, LoaderCircle, Check, ExternalLink } from 'lucide-react'
 import ProjectCard from '../components/ProjectCard'
-import { saveProjects } from '../utils/storage'
 
-export default function Home({ projects, setProjects, onToast }) {
+export default function Home({ projects, setProjects, onImportProjects, onDeleteProject, user, onSignOut, onToast }) {
   const navigate = useNavigate()
   const [search, setSearch] = useState('')
   const [deleteTarget, setDeleteTarget] = useState(null)
@@ -48,7 +47,7 @@ export default function Home({ projects, setProjects, onToast }) {
     }
   }
 
-  function importGithubRepos() {
+  async function importGithubRepos() {
     const selected = githubRepos.filter((repo) => selectedRepos.includes(repo.id))
     if (!selected.length) { setGithubError('Select at least one repository to import.'); return }
     const imported = selected.map((repo) => ({
@@ -66,23 +65,27 @@ export default function Home({ projects, setProjects, onToast }) {
       setGithubError('All selected repositories are already in your project hub.')
       return
     }
-    const next = [...newProjects, ...projects]
-    setProjects(next)
-    saveProjects(next)
-    setGithubOpen(false)
-    setGithubRepos([])
-    setSelectedRepos([])
-    setGithubSearch('')
-    setGithubError('')
-    onToast({ type: 'success', message: `Imported ${newProjects.length} ${newProjects.length === 1 ? 'repository' : 'repositories'} from GitHub.` })
+    try {
+      await onImportProjects(newProjects)
+      setGithubOpen(false)
+      setGithubRepos([])
+      setSelectedRepos([])
+      setGithubSearch('')
+      setGithubError('')
+      onToast({ type: 'success', message: `Imported ${newProjects.length} ${newProjects.length === 1 ? 'repository' : 'repositories'} from GitHub.` })
+    } catch (error) {
+      setGithubError(`Could not save imported repositories to the cloud: ${error.message}`)
+    }
   }
 
-  function deleteProject() {
-    const next = projects.filter((project) => project.id !== deleteTarget.id)
-    setProjects(next)
-    saveProjects(next)
-    setDeleteTarget(null)
-    onToast({ type: 'success', message: 'Project deleted.' })
+  async function deleteProject() {
+    try {
+      await onDeleteProject(deleteTarget.id)
+      setDeleteTarget(null)
+      onToast({ type: 'success', message: 'Project deleted from your cloud workspace.' })
+    } catch (error) {
+      onToast({ type: 'error', message: `Could not delete project: ${error.message}` })
+    }
   }
 
   async function copyAll() {
@@ -125,7 +128,7 @@ export default function Home({ projects, setProjects, onToast }) {
         <div className="hero-orbit orbit-one" />
         <div className="hero-orbit orbit-two" />
         <div className="hero-abstract"><Layers3 size={72} strokeWidth={0.6} /></div>
-        <div className="hero-bottomline"><span>PERSONAL PROJECT DIRECTORY</span><span>AA / 001</span></div>
+        <div className="hero-bottomline"><span>PERSONAL PROJECT DIRECTORY · CLOUD SYNC</span><span className="account-strip"><span>{user?.email}</span><button type="button" onClick={onSignOut}>Sign out</button></span></div>
       </header>
 
       <section className="projects-section">
@@ -230,7 +233,7 @@ export default function Home({ projects, setProjects, onToast }) {
           <section className="confirm-modal" role="dialog" aria-modal="true" aria-labelledby="delete-title">
             <div className="modal-icon"><X size={20} /></div>
             <h3 id="delete-title">Delete project?</h3>
-            <p><strong>{deleteTarget.name}</strong> will be removed from this browser's project list. This can't be undone.</p>
+            <p><strong>{deleteTarget.name}</strong> will be removed from your cloud workspace on all devices. This can't be undone.</p>
             <div className="modal-actions">
               <button className="button button-secondary" onClick={() => setDeleteTarget(null)}>Cancel</button>
               <button className="button button-danger" onClick={deleteProject}>Delete project</button>
