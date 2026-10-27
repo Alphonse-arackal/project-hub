@@ -1,6 +1,6 @@
 import {
   GraduationCap, Gamepad2, Clapperboard, Dumbbell, Shirt, ShoppingCart,
-  UserRound, FileText, Monitor, Layers, CircleHelp, Pencil, Trash2,
+  UserRound, FileText, Monitor, Layers, Code2, CircleHelp, Pencil, Trash2,
 } from 'lucide-react'
 import ProjectActions from './ProjectActions'
 
@@ -15,6 +15,7 @@ const iconMap = {
   file: FileText,
   monitor: Monitor,
   layers: Layers,
+  code: Code2,
 }
 
 export function ProjectIcon({ name, size = 25 }) {
